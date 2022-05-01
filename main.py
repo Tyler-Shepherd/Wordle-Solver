@@ -30,6 +30,9 @@ def colorize(target, guess):
 def get_words():
     file = open("./words.txt", 'r')
     lines = file.readlines()
+    for i in range(len(lines)):
+        lines[i] = lines[i].strip()
+
     return lines
 
 def all_green(colors):
@@ -57,12 +60,50 @@ def random_solve(target, words):
     num_iterations = 0
 
     while num_iterations < 100000:
-        random_word = random.choice(words).strip()
+        random_word = random.choice(words)
         colors = colorize(target, random_word)
         print(num_iterations, random_word, print_colors(colors))
 
         if all_green(colors):
             break
+
+        num_iterations += 1
+
+    return num_iterations
+
+
+def random_hard_solve(target, words):
+    num_iterations = 0
+    guessable_words = set(words)
+
+    while num_iterations < 1000:
+        guess = random.choice(list(guessable_words))
+        colors = colorize(target, guess)
+        print(num_iterations, guess, print_colors(colors))
+
+        if all_green(colors):
+            break
+
+        guessable_words.remove(guess)
+
+        for word in list(guessable_words):
+            should_remove = False
+            for c, color in enumerate(colors):
+                # all greens in same place
+                if color == Color.GREEN:
+                    if word[c] != guess[c]:
+                        should_remove = True
+                        break
+
+                # all yellow letters in different places
+
+                # no gray letters
+
+
+                # except this also needs to consider all previous guesses
+
+            if should_remove:
+                guessable_words.remove(word)
 
         num_iterations += 1
 
@@ -77,7 +118,7 @@ if __name__ == '__main__':
     # all lower case for now
     target = "lefty"
 
-    iters = random_solve(target, words)
+    iters = random_hard_solve(target, words)
 
     print(target, iters)
 
