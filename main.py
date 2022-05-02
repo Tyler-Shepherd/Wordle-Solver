@@ -75,6 +75,9 @@ def random_solve(target, words):
 def random_hard_solve(target, words):
     num_iterations = 0
     guessable_words = set(words)
+    known_greens = set()
+    known_yellows = set()
+    known_grays = set()
 
     while num_iterations < 1000:
         guess = random.choice(list(guessable_words))
@@ -86,24 +89,46 @@ def random_hard_solve(target, words):
 
         guessable_words.remove(guess)
 
-        for word in list(guessable_words):
+        for c, color in enumerate(colors):
+            guessed_letter = guess[c]
+            if color == Color.GREEN:
+                known_greens.add((c, guessed_letter))
+            elif color == Color.YELLOW:
+                known_yellows.add((c, guessed_letter))
+            else:
+                known_grays.add(guessed_letter)
+
+        for possible_word in list(guessable_words):
             should_remove = False
-            for c, color in enumerate(colors):
-                # all greens in same place
-                if color == Color.GREEN:
-                    if word[c] != guess[c]:
-                        should_remove = True
-                        break
 
-                # all yellow letters in different places
+            # all greens in same place
+            for (pos, letter) in known_greens:
+                if possible_word[pos] != letter:
+                    should_remove = True
 
-                # no gray letters
+            # all yellow letters in different places
+            for (pos, letter) in known_yellows:
+                yellow_letter_pos = possible_word.find(letter)
+                if yellow_letter_pos == -1 or yellow_letter_pos == pos:
+                    should_remove = True
+
+                # this doesnt work for repeated letters
+                # for example: target is "lefty". first guess is "forte". says the 'e' is yellow
+                # it should not try "lefte". even though there is an e in different place, the last e is in same
+
+                # other issue: if you guess something with 2 'e's, and both are yellow
+                # then every guess after has to have at least 2 'e's
+
+                # or if you guess 3 'e's and 2 are yellow
+                # every guess after has to have exactly 2 'e's
+
+                # so we cant keep a big set on per-letter basis. has to be per-guess with context of rest of guess
 
 
-                # except this also needs to consider all previous guesses
+            # no gray letters
 
             if should_remove:
-                guessable_words.remove(word)
+                guessable_words.remove(possible_word)
 
         num_iterations += 1
 
