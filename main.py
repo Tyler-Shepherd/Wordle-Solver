@@ -157,16 +157,50 @@ def random_hard_solve(target, words):
 
 
 
+def map_input_to_colors(colors_input):
+    return list(map(lambda x: Color(int(x)), colors_input))
+
+
+def solve_for_me(words):
+    guessable_words = set(words)
+    num_iterations = 1
+    while num_iterations < 100:
+        guess = random.choice(list(guessable_words))
+
+        colors_input = input(str(num_iterations) + ". " + guess + ": ")
+        colors = map_input_to_colors(colors_input)
+
+        guessable_words.remove(guess)
+
+        # go through guessable_words and remove all those that dont fit colors
+        for possible_word in list(guessable_words):
+            if not is_possible(possible_word, colors, guess):
+                guessable_words.remove(possible_word)
+
+        num_remaining = len(guessable_words)
+        print(num_remaining)
+
+        if num_remaining < 10:
+            print(guessable_words)
+
+        num_iterations += 1
+
+
+
+
+
+
 
 if __name__ == '__main__':
     words = get_words()
 
     # all lower case for now
-    target = "cycle"
+    target = "hairy"
 
-    iters = random_hard_solve(target, words)
-    print(target, iters)
+    # iters = random_hard_solve(target, words)
+    # print(target, iters)
 
+    solve_for_me(words)
 
     # print(is_possible("iiee", [Color.YELLOW, Color.GRAY, Color.GRAY, Color.GRAY], "eexx"))
 
