@@ -129,10 +129,10 @@ def random_hard_solve(target, words):
 
     while num_iterations < 1000:
         guess = random.choice(list(guessable_words))
-        if num_iterations == 1:
-            guess = "hogen"
-        if num_iterations == 2:
-            guess = "fiere"
+        # if num_iterations == 1:
+        #     guess = "hogen"
+        # if num_iterations == 2:
+        #     guess = "fiere"
 
         colors = colorize(target, guess)
 
