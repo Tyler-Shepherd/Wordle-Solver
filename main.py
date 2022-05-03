@@ -20,7 +20,8 @@ def colorize(target, guess):
         if guess[loc] == target_letter:
             colors[loc] = Color.GREEN
         elif target_letter in guess:
-            guess_loc = next((x for x in range(len(guess)) if guess[x] == target_letter and colors[x] == Color.GRAY), None)
+            guess_loc = next(
+                (x for x in range(len(guess)) if guess[x] == target_letter and colors[x] == Color.GRAY), None)
             if guess_loc is not None:
                 colors[guess_loc] = Color.YELLOW
 
@@ -84,6 +85,8 @@ def is_possible(possible_word, colors, guess):
                 return False
             used[pos] = True
 
+    for (pos, color) in enumerate(colors):
+        guessed_letter = guess[pos]
         if color == Color.YELLOW:
             # yellows not in the same place
             if possible_word[pos] == guessed_letter:
@@ -96,6 +99,8 @@ def is_possible(possible_word, colors, guess):
                 return False
             used[reused_yellow] = True
 
+    for (pos, color) in enumerate(colors):
+        guessed_letter = guess[pos]
         # no grays used
         if color == Color.GRAY:
             used_gray = next(
@@ -113,6 +118,8 @@ def is_possible(possible_word, colors, guess):
         # if you guess 3 'e's and 2 are yellow
         # every guess after has to have exactly 2 'e's
 
+        # target "cycle", guess "fiere". needs to do green first and not remove on first gray e
+
     return True
 
 
@@ -122,8 +129,12 @@ def random_hard_solve(target, words):
 
     while num_iterations < 1000:
         guess = random.choice(list(guessable_words))
-        colors = colorize(target, guess)
+        if num_iterations == 1:
+            guess = "hogen"
+        if num_iterations == 2:
+            guess = "fiere"
 
+        colors = colorize(target, guess)
 
         guessable_words.remove(guess)
 
@@ -151,7 +162,7 @@ if __name__ == '__main__':
     words = get_words()
 
     # all lower case for now
-    target = "story"
+    target = "cycle"
 
     iters = random_hard_solve(target, words)
     print(target, iters)
