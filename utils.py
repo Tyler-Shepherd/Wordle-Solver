@@ -22,10 +22,13 @@ def colorize(target, guess):
 
     return colors
 
-def is_possible(possible_word, colors, guess):
+def is_possible(possible_word, colors, guess, ignore=None):
     used = [False] * len(possible_word)
 
     for (pos, color) in enumerate(colors):
+        if pos == ignore:
+            continue
+
         guessed_letter = guess[pos]
 
         # all greens in same place
@@ -35,6 +38,9 @@ def is_possible(possible_word, colors, guess):
             used[pos] = True
 
     for (pos, color) in enumerate(colors):
+        if pos == ignore:
+            continue
+
         guessed_letter = guess[pos]
         if color == Color.YELLOW:
             # yellows not in the same place
@@ -49,6 +55,9 @@ def is_possible(possible_word, colors, guess):
             used[reused_yellow] = True
 
     for (pos, color) in enumerate(colors):
+        if pos == ignore:
+            continue
+
         guessed_letter = guess[pos]
 
         if color == Color.GRAY:
@@ -73,5 +82,12 @@ def is_possible(possible_word, colors, guess):
         # every guess after has to have exactly 2 'e's
 
         # target "cycle", guess "fiere". needs to do green first and not remove on first gray e
+
+    return True
+
+def all_green(colors):
+    for i in colors:
+        if i != Color.GREEN:
+            return False
 
     return True

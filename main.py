@@ -4,7 +4,7 @@
 import random
 
 from fibble import solve_fibble_random, Fib
-from utils import Color, colorize, is_possible
+from utils import Color, colorize, is_possible, all_green
 
 
 def get_words():
@@ -15,12 +15,7 @@ def get_words():
 
     return lines
 
-def all_green(colors):
-    for i in colors:
-        if i != Color.GREEN:
-            return False
 
-    return True
 
 
 def print_colors(colors):
@@ -152,7 +147,7 @@ if __name__ == '__main__':
 
     # print(is_possible("vulva", [Color.GRAY, Color.YELLOW, Color.GRAY, Color.GRAY, Color.GRAY], "bajra"))
 
-    solve_fibble_random(words, "blank", [Fib(1,2)])
+    solve_fibble_random(words, "exist", [Fib(2,1), Fib(3,1), Fib(1,1), Fib(2,1), Fib(0,1), Fib(1,2), Fib(3,1), Fib(2,2), Fib(1,1)])
 
 
 
