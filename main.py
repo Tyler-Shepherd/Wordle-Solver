@@ -101,8 +101,13 @@ def is_possible(possible_word, colors, guess):
 
     for (pos, color) in enumerate(colors):
         guessed_letter = guess[pos]
-        # no grays used
+
         if color == Color.GRAY:
+            # gray not in same spot
+            if possible_word[pos] == guessed_letter:
+                return False
+
+            # no grays used anywhere
             used_gray = next(
                 (x for x in range(len(possible_word)) if possible_word[x] == guessed_letter and not used[x]), None)
             if used_gray is not None:
@@ -186,8 +191,22 @@ def solve_for_me(words):
         num_iterations += 1
 
 
+def find_possible_words(words, colorsArr, guesses):
+    guessable_words = set(words)
+    for (index, colorsInput) in enumerate(colorsArr):
+        colors = map_input_to_colors(colorsInput)
+        guess = guesses[index]
 
+        if guess in guessable_words:
+            guessable_words.remove(guess)
 
+        # go through guessable_words and remove all those that dont fit colors
+        for possible_word in list(guessable_words):
+            if not is_possible(possible_word, colors, guess):
+                guessable_words.remove(possible_word)
+
+    print(len(guessable_words))
+    print(guessable_words)
 
 
 
@@ -195,14 +214,19 @@ if __name__ == '__main__':
     words = get_words()
 
     # all lower case for now
-    target = "hairy"
+    target = "rebus"
 
     # iters = random_hard_solve(target, words)
     # print(target, iters)
 
-    solve_for_me(words)
+    # solve_for_me(words)
 
-    # print(is_possible("iiee", [Color.YELLOW, Color.GRAY, Color.GRAY, Color.GRAY], "eexx"))
+    find_possible_words(words, [
+        "13333"
+    ], ["dingo"]
+    )
+
+    # print(is_possible("vulva", [Color.GRAY, Color.YELLOW, Color.GRAY, Color.GRAY, Color.GRAY], "bajra"))
 
 
 
