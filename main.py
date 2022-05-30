@@ -3,8 +3,8 @@
 # Press Ctrl+F8 to toggle the breakpoint.
 import random
 
-from fibble import solve_fibble_random, Fib
-from utils import Color, colorize, is_possible, all_green
+from fibble import solve_fibble_random, Fib, solve_for_me_fibble
+from utils import Color, colorize, is_possible, all_green, map_input_to_colors
 
 
 def get_words():
@@ -79,12 +79,6 @@ def random_hard_solve(target, words):
 
     return num_iterations
 
-
-
-def map_input_to_colors(colors_input):
-    return list(map(lambda x: Color(int(x)), colors_input))
-
-
 def solve_for_me(words):
     guessable_words = set(words)
     num_iterations = 1
@@ -140,14 +134,13 @@ if __name__ == '__main__':
 
     # solve_for_me(words)
 
-    # find_possible_words(words, [
-    #     "13333"
-    # ], ["dingo"]
-    # )
+    find_possible_words(words, [
+        "11112", "11111", "12111", "13111"
+    ], ["minty", "fresh", "tooth", "paste"]
+    )
 
     # print(is_possible("vulva", [Color.GRAY, Color.YELLOW, Color.GRAY, Color.GRAY, Color.GRAY], "bajra"))
 
-    solve_fibble_random(words, "exist", [Fib(2,1), Fib(3,1), Fib(1,1), Fib(2,1), Fib(0,1), Fib(1,2), Fib(3,1), Fib(2,2), Fib(1,1)])
+    # solve_fibble_random(words, "exist", [Fib(2,1), Fib(3,1), Fib(1,1), Fib(2,1), Fib(0,1), Fib(1,2), Fib(3,1), Fib(2,2), Fib(1,1)])
 
-
-
+    solve_for_me_fibble(words, "focus")

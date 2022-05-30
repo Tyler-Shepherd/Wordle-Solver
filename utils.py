@@ -91,3 +91,7 @@ def all_green(colors):
             return False
 
     return True
+
+
+def map_input_to_colors(colors_input):
+    return list(map(lambda x: Color(int(x)), colors_input))

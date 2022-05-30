@@ -1,7 +1,7 @@
 import random
 from copy import copy
 
-from utils import colorize, is_possible, Color, all_green
+from utils import colorize, is_possible, Color, all_green, map_input_to_colors
 
 
 class Fib:
@@ -16,26 +16,23 @@ class Fib:
         return stringRep
 
 
-
-def solve_fibble_random(words, target, fibs):
+def solve_fibble_base(words, colorize_fn, first_guess):
     num_iterations = 1
     lie_tree = [([], set(words))] # list of tuples (lie_positions, remaining_words)
 
-    while num_iterations < 10:
+    while num_iterations < 100:
         guessable_words = set()
         for (_, words) in lie_tree:
             guessable_words = guessable_words.union(words)
-        guess = random.choice(list(guessable_words))
 
-        print(num_iterations, guess)
+        if num_iterations == 1 and first_guess is not None:
+            guess = first_guess
+        else:
+            guess = random.choice(list(guessable_words))
 
-        colors = colorize(target, guess)
-        if all_green(colors):
+        colors = colorize_fn(guess, num_iterations)
+        if colors is True:
             break
-
-        print("True colors:", colors)
-        apply_lie(colors, fibs[num_iterations - 1])
-        print("Fibbing colors:" ,colors, fibs[num_iterations - 1])
 
         new_lie_tree = []
 
@@ -58,12 +55,38 @@ def solve_fibble_random(words, target, fibs):
         lie_tree = new_lie_tree
 
         for potential in lie_tree:
-            if (len(potential[1]) < 10):
+            if len(potential[1]) < 10:
                 print(potential[0], potential[1])
             else:
                 print(potential[0], len(potential[1]))
 
         num_iterations += 1
+
+
+def solve_fibble_random(words, target, fibs):
+    def colorize_fn(guess, num_iterations):
+        print(num_iterations, guess)
+
+        colors = colorize(target, guess)
+        if all_green(colors):
+            return True
+
+        print("True colors:", colors)
+        apply_lie(colors, fibs[num_iterations - 1])
+        print("Fibbing colors:" ,colors, fibs[num_iterations - 1])
+        return colors
+
+    solve_fibble_base(words, colorize_fn, None)
+
+def solve_for_me_fibble(words, first_guess):
+
+    def colorize_fn(guess, num_iterations):
+        colors_input = input(str(num_iterations) + ". " + guess + ": ")
+        colors = map_input_to_colors(colors_input)
+        return colors
+
+    solve_fibble_base(words, colorize_fn, first_guess)
+
 
 def apply_lie(colors, lie):
     curr_color = colors[lie.position]
