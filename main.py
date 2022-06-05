@@ -139,9 +139,9 @@ if __name__ == '__main__':
     # ], ["sloth", "chasm"]
     # )
 
-    # print(is_possible("acb", [Color.GRAY, Color.YELLOW, Color.GREEN], "ccb"))
-    # print(is_possible("acb", [Color.GRAY, Color.GREEN, Color.GREEN], "ccb"))
+    print(is_possible("palsy", [Color.GRAY, Color.GRAY, Color.YELLOW, Color.YELLOW, Color.GRAY], "trass"))
+    print(is_possible("palsy", [Color.GRAY, Color.GRAY, Color.YELLOW, Color.GREEN, Color.GRAY], "trass"))
 
-    solve_fibble_random(words, "exist", [Fib(2,1), Fib(3,1), Fib(1,1), Fib(2,1), Fib(0,1), Fib(1,2), Fib(3,1), Fib(2,2), Fib(1,1)])
+    # solve_fibble_random(words, "exist", [Fib(2,1), Fib(3,1), Fib(1,1), Fib(2,1), Fib(0,1), Fib(1,2), Fib(3,1), Fib(2,2), Fib(1,1)])
 
     # solve_for_me_fibble(words, "venom")
