@@ -24,6 +24,7 @@ def solve_fibble_base(words, colorize_fn, first_guess):
         guessable_words = set()
         for (_, words) in lie_tree:
             guessable_words = guessable_words.union(words)
+        print(len(guessable_words))
 
         if num_iterations == 1 and first_guess is not None:
             guess = first_guess
@@ -45,8 +46,17 @@ def solve_fibble_base(words, colorize_fn, first_guess):
                     new_words.remove(guess)
                 new_fibs.append(Fib(guess_lie_pos, None))
 
+                colors_lie_1 = copy(colors)
+                apply_lie(colors_lie_1, Fib(guess_lie_pos, 1))
+                colors_lie_2 = copy(colors)
+                apply_lie(colors_lie_2, Fib(guess_lie_pos, 2))
+
                 for possible_word in list(new_words):
-                    if not is_possible(possible_word, colors, guess, guess_lie_pos):
+                    # check if possible if the lying color is either of the other two colors
+                    is_possible_1 = is_possible(possible_word, colors_lie_1, guess)
+                    is_possible_2 = is_possible(possible_word, colors_lie_2, guess)
+
+                    if not is_possible_1 and not is_possible_2:
                         new_words.remove(possible_word)
 
                 if len(new_words) > 0:

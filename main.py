@@ -134,13 +134,14 @@ if __name__ == '__main__':
 
     # solve_for_me(words)
 
-    find_possible_words(words, [
-        "11112", "11111", "12111", "13111"
-    ], ["minty", "fresh", "tooth", "paste"]
-    )
+    # find_possible_words(words, [
+    #     "21112", "13331"
+    # ], ["sloth", "chasm"]
+    # )
 
-    # print(is_possible("vulva", [Color.GRAY, Color.YELLOW, Color.GRAY, Color.GRAY, Color.GRAY], "bajra"))
+    # print(is_possible("acb", [Color.GRAY, Color.YELLOW, Color.GREEN], "ccb"))
+    # print(is_possible("acb", [Color.GRAY, Color.GREEN, Color.GREEN], "ccb"))
 
-    # solve_fibble_random(words, "exist", [Fib(2,1), Fib(3,1), Fib(1,1), Fib(2,1), Fib(0,1), Fib(1,2), Fib(3,1), Fib(2,2), Fib(1,1)])
+    solve_fibble_random(words, "exist", [Fib(2,1), Fib(3,1), Fib(1,1), Fib(2,1), Fib(0,1), Fib(1,2), Fib(3,1), Fib(2,2), Fib(1,1)])
 
-    solve_for_me_fibble(words, "focus")
+    # solve_for_me_fibble(words, "venom")
