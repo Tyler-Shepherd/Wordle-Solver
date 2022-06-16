@@ -1,4 +1,5 @@
 from enum import Enum
+import random
 
 class Color(Enum):
     GRAY = 1
@@ -89,3 +90,9 @@ def all_green(colors):
 
 def map_input_to_colors(colors_input):
     return list(map(lambda x: Color(int(x)), colors_input))
+
+
+def get_entropy(word, all_words):
+    return random.random()
+
+

@@ -4,7 +4,7 @@
 import random
 
 from fibble import solve_fibble_random, Fib, solve_for_me_fibble
-from utils import Color, colorize, is_possible, all_green, map_input_to_colors
+from utils import Color, colorize, is_possible, all_green, map_input_to_colors, get_entropy
 
 
 def get_words():
@@ -47,18 +47,13 @@ def random_solve(target, words):
     return num_iterations
 
 
-def random_hard_solve(target, words):
+def hard_solve_base(words, colorize_fn, choose_guess_fn):
     num_iterations = 1
     guessable_words = set(words)
 
     while num_iterations < 1000:
-        guess = random.choice(list(guessable_words))
-        # if num_iterations == 1:
-        #     guess = "hogen"
-        # if num_iterations == 2:
-        #     guess = "fiere"
-
-        colors = colorize(target, guess)
+        guess = choose_guess_fn(guessable_words)
+        colors = colorize_fn(guess, num_iterations)
 
         guessable_words.remove(guess)
 
@@ -79,29 +74,49 @@ def random_hard_solve(target, words):
 
     return num_iterations
 
-def solve_for_me(words):
-    guessable_words = set(words)
-    num_iterations = 1
-    while num_iterations < 100:
-        guess = random.choice(list(guessable_words))
 
+def random_hard_solve(target, words):
+    def colorize_fn(guess, num_iterations):
+        return colorize(target, guess)
+
+    def choose_guess_fn(guessable_words):
+        return random.choice(list(guessable_words))
+
+    return hard_solve_base(words, colorize_fn, choose_guess_fn)
+
+
+def info_theory_solve(target, words):
+    def colorize_fn(guess, num_iterations):
+        return colorize(target, guess)
+
+    def choose_guess_fn(guessable_words):
+        entropies = []
+
+        for word in guessable_words:
+            entropy = get_entropy(word, words)
+            entropies.append((word, entropy))
+
+        entropies.sort(reverse=True, key=lambda x: x[1])
+
+        for i in range(min(len(entropies), 5)):
+            print("\t", entropies[i])
+
+        return entropies[0][0]
+
+    return hard_solve_base(words, colorize_fn, choose_guess_fn)
+
+
+
+
+def solve_for_me_random(words):
+    def colorize_fn(guess, num_iterations):
         colors_input = input(str(num_iterations) + ". " + guess + ": ")
-        colors = map_input_to_colors(colors_input)
+        return map_input_to_colors(colors_input)
 
-        guessable_words.remove(guess)
+    def choose_guess_fn(guessable_words):
+        return random.choice(list(guessable_words))
 
-        # go through guessable_words and remove all those that dont fit colors
-        for possible_word in list(guessable_words):
-            if not is_possible(possible_word, colors, guess):
-                guessable_words.remove(possible_word)
-
-        num_remaining = len(guessable_words)
-        print(num_remaining)
-
-        if num_remaining < 10:
-            print(guessable_words)
-
-        num_iterations += 1
+    return hard_solve_base(words, colorize_fn, choose_guess_fn)
 
 
 def find_possible_words(words, colorsArr, guesses):
@@ -127,21 +142,21 @@ if __name__ == '__main__':
     words = get_words()
 
     # all lower case for now
-    target = "rebus"
+    target = "primo"
 
-    # iters = random_hard_solve(target, words)
-    # print(target, iters)
+    iters = info_theory_solve(target, words)
+    print(target, iters)
 
-    # solve_for_me(words)
+    # solve_for_me_random(words)
 
     # find_possible_words(words, [
-    #     "21112", "13331"
-    # ], ["sloth", "chasm"]
+    #     "12112", "11311"
+    # ], ["color", "blind"]
     # )
 
-    print(is_possible("palsy", [Color.GRAY, Color.GRAY, Color.YELLOW, Color.YELLOW, Color.GRAY], "trass"))
-    print(is_possible("palsy", [Color.GRAY, Color.GRAY, Color.YELLOW, Color.GREEN, Color.GRAY], "trass"))
+    # print(is_possible("palsy", [Color.GRAY, Color.GRAY, Color.YELLOW, Color.YELLOW, Color.GRAY], "trass"))
+    # print(is_possible("palsy", [Color.GRAY, Color.GRAY, Color.YELLOW, Color.GREEN, Color.GRAY], "trass"))
 
     # solve_fibble_random(words, "exist", [Fib(2,1), Fib(3,1), Fib(1,1), Fib(2,1), Fib(0,1), Fib(1,2), Fib(3,1), Fib(2,2), Fib(1,1)])
 
-    # solve_for_me_fibble(words, "venom")
+    # solve_for_me_fibble(words, "folly")
