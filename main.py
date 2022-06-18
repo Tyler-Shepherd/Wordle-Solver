@@ -92,9 +92,13 @@ def info_theory_solve(target, words):
     def choose_guess_fn(guessable_words):
         entropies = []
 
+        count = 0
         for word in guessable_words:
-            entropy = get_entropy(word, words)
+            entropy = get_entropy(word, guessable_words)
             entropies.append((word, entropy))
+            count += 1
+
+            print(count, word, entropy)
 
         entropies.sort(reverse=True, key=lambda x: x[1])
 

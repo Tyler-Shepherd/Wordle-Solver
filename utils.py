@@ -1,4 +1,5 @@
 from enum import Enum
+import math
 import random
 
 class Color(Enum):
@@ -92,7 +93,53 @@ def map_input_to_colors(colors_input):
     return list(map(lambda x: Color(int(x)), colors_input))
 
 
-def get_entropy(word, all_words):
-    return random.random()
+all_colors = None
+def all_color_arrangements():
+    global all_colors
+
+    if all_colors is not None:
+        return all_colors
+
+    def color_recur(so_far):
+        if len(so_far) == 5:
+            return [so_far]
+
+        with_gray = so_far.copy()
+        with_gray.append(Color.GRAY)
+        with_yellow = so_far.copy()
+        with_yellow.append(Color.YELLOW)
+        with_green = so_far.copy()
+        with_green.append(Color.GREEN)
+
+        recurred_colors = color_recur(with_gray)
+        recurred_colors.extend(color_recur(with_yellow))
+        recurred_colors.extend(color_recur(with_green))
+        return recurred_colors
+
+    all_colors = color_recur([])
+    return all_colors
+
+
+
+def get_entropy(word, remaining_words):
+    color_arrangements = all_color_arrangements()
+    all_color_arrangements()
+    all_color_arrangements()
+
+    entropy = 0
+    for colors in color_arrangements:
+        # this isnt fully correct bc is_possible doesnt check that the coloring is accurate
+        # like it could have only the second "e" in a word yellow, which shouldnt be possible
+        possible_words = list(filter(lambda w: is_possible(w, colors, word), remaining_words))
+        p = len(possible_words) / len(remaining_words)
+
+        if len(possible_words) == 0:
+            continue
+
+        value = p * -math.log2(p)
+
+        entropy += value
+
+    return entropy
 
 
