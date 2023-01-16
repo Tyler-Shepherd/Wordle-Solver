@@ -81,6 +81,25 @@ def is_possible(possible_word, colors, guess):
 
     return True
 
+
+def is_good_coloring(colors, guess):
+    for (pos, color) in enumerate(colors):
+        if color == Color.YELLOW:
+            letter = guess[pos]
+
+            # there cant be any grays of the same letter before a yellow
+            for (i, x) in enumerate(guess):
+                if x == letter and colors[i] == Color.GRAY and i < pos:
+                    return False
+
+    # this does not cover all cases, there are other bad possible colorings
+    # like for example [Yellow, Green] is not possible since theres nowhere for the Yellow letter to go
+    # but is_possible will cover those cases, since there wont be any words that match that pattern
+    # whereas there are words that could match [Gray, Gray, Yellow] when guessing "baa" (the way is_possible is written), like "abb"
+
+    return True
+
+
 def all_green(colors):
     for i in colors:
         if i != Color.GREEN:
@@ -123,13 +142,12 @@ def all_color_arrangements():
 
 def get_entropy(word, remaining_words):
     color_arrangements = all_color_arrangements()
-    all_color_arrangements()
-    all_color_arrangements()
 
     entropy = 0
     for colors in color_arrangements:
-        # this isnt fully correct bc is_possible doesnt check that the coloring is accurate
-        # like it could have only the second "e" in a word yellow, which shouldnt be possible
+        if not is_good_coloring(colors, word):
+            continue
+
         possible_words = list(filter(lambda w: is_possible(w, colors, word), remaining_words))
         p = len(possible_words) / len(remaining_words)
 

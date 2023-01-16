@@ -1,4 +1,3 @@
-C:\Users\tyler\AppData\Local\Programs\Python\Python310\python.exe "C:/Users/tyler/Documents/Computer Science/Wordle Solver/main.py"
 1 avian 4.978215262915233
 2 powin 4.26969319635979
 3 mausy 4.832643779446652
