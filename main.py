@@ -16,7 +16,7 @@ def get_words():
     return lines
 
 def get_entropies_file():
-    file = open("./entropies.txt", 'r')
+    file = open("./entropies_2.txt", 'r')
     lines = file.readlines()
     entropies = []
     for i in range(len(lines)):
@@ -162,9 +162,9 @@ if __name__ == '__main__':
     words = get_words()
 
     # all lower case
-    target = "night"
+    target = "quota"
 
-    iters = info_theory_solve(target, words, True)
+    iters = info_theory_solve(target, words, False)
     print(target, iters)
 
     # solve_for_me_random(words)
