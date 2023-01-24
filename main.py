@@ -95,6 +95,29 @@ def random_hard_solve(target, words):
     return hard_solve_base(words, colorize_fn, choose_guess_fn)
 
 
+
+def info_theory_choose_guess(guessable_words, guess_num, recalculate_first, init_entropies):
+    entropies = []
+
+    count = 0
+    if recalculate_first or guess_num != 1:
+        for word in guessable_words:
+            entropy = get_entropy(word, guessable_words)
+            entropies.append((word, entropy))
+
+            count += 1
+            print(count, word, entropy)
+    else:
+        entropies = init_entropies
+
+    entropies.sort(reverse=True, key=lambda x: x[1])
+
+    for i in range(min(len(entropies), 10)):
+        print("\t", entropies[i])
+
+    return entropies[0][0]
+
+
 def info_theory_solve(target, words, recalculate_first):
     def colorize_fn(guess, num_iterations):
         return colorize(target, guess)
@@ -103,28 +126,21 @@ def info_theory_solve(target, words, recalculate_first):
         init_entropies = get_entropies_file()
 
     def choose_guess_fn(guessable_words, guess_num):
-        entropies = []
-
-        count = 0
-        if recalculate_first or guess_num != 1:
-            for word in guessable_words:
-                entropy = get_entropy(word, guessable_words)
-                entropies.append((word, entropy))
-
-                count += 1
-                print(count, word, entropy)
-        else:
-            entropies = init_entropies
-
-        entropies.sort(reverse=True, key=lambda x: x[1])
-
-        for i in range(min(len(entropies), 10)):
-            print("\t", entropies[i])
-
-        return entropies[0][0]
+        return info_theory_choose_guess(guessable_words, guess_num, recalculate_first, init_entropies)
 
     return hard_solve_base(words, colorize_fn, choose_guess_fn)
 
+def solve_for_me_info_theory(words):
+    def colorize_fn(guess, num_iterations):
+        colors_input = input(str(num_iterations) + ". " + guess + ": ")
+        return map_input_to_colors(colors_input)
+
+    init_entropies = get_entropies_file()
+
+    def choose_guess_fn(guessable_words, guess_num):
+        return info_theory_choose_guess(guessable_words, guess_num, False, init_entropies)
+
+    return hard_solve_base(words, colorize_fn, choose_guess_fn)
 
 
 
@@ -162,12 +178,13 @@ if __name__ == '__main__':
     words = get_words()
 
     # all lower case
-    target = "quota"
+    # target = "heart"
 
-    iters = info_theory_solve(target, words, False)
-    print(target, iters)
+    # iters = info_theory_solve(target, words, False)
+    # print(target, iters)
 
     # solve_for_me_random(words)
+    solve_for_me_info_theory(words)
 
     # find_possible_words(words, [
     #     "11211", "11211", "21211", "21211", "21221", "21222"
