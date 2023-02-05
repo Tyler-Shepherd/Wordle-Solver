@@ -1,7 +1,8 @@
+import math
 import random
 from copy import copy
 
-from utils import colorize, is_possible, Color, all_green, map_input_to_colors
+from utils import colorize, is_possible, Color, all_green, map_input_to_colors, all_color_arrangements, is_good_coloring
 
 
 class Fib:
@@ -106,3 +107,33 @@ def apply_lie(colors, lie):
         new_color_val = 3
 
     colors[lie.position] = Color(new_color_val)
+
+
+def get_entropy_fibble(word, remaining_words):
+    color_arrangements = all_color_arrangements()
+    color_arrangements_with_fibs = []
+
+    for ar in color_arrangements:
+        for i in range(5):
+            color_arrangements_with_fibs.append((ar, Fib(i,1)))
+            color_arrangements_with_fibs.append((ar, Fib(i,2)))
+
+    entropy = 0
+    for (colors, fib) in color_arrangements_with_fibs:
+        # idk what to do with this
+        # if not is_good_coloring(colors, word):
+        #     continue
+
+        copy_colors = copy(colors)
+        apply_lie(copy_colors, fib)
+        possible_words = list(filter(lambda w: is_possible(w, copy_colors, word), remaining_words))
+        p = len(possible_words) / len(remaining_words)
+
+        if len(possible_words) == 0:
+            continue
+
+        value = p * -math.log2(p)
+
+        entropy += value
+
+    return entropy

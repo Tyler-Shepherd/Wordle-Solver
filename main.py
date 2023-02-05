@@ -3,7 +3,7 @@
 # Press Ctrl+F8 to toggle the breakpoint.
 import random
 
-from fibble import solve_fibble_random, Fib, solve_for_me_fibble
+from fibble import solve_fibble_random, Fib, solve_for_me_fibble, get_entropy_fibble
 from utils import Color, colorize, is_possible, all_green, map_input_to_colors, get_entropy, is_good_coloring
 
 
@@ -178,13 +178,13 @@ if __name__ == '__main__':
     words = get_words()
 
     # all lower case
-    # target = "heart"
+    target = "fishy"
 
     # iters = info_theory_solve(target, words, False)
     # print(target, iters)
 
     # solve_for_me_random(words)
-    solve_for_me_info_theory(words)
+    # solve_for_me_info_theory(words)
 
     # find_possible_words(words, [
     #     "11211", "11211", "21211", "21211", "21221", "21222"
@@ -193,7 +193,10 @@ if __name__ == '__main__':
 
     # solve_fibble_random(words, "exist", [Fib(2,1), Fib(3,1), Fib(1,1), Fib(2,1), Fib(0,1), Fib(1,2), Fib(3,1), Fib(2,2), Fib(1,1)])
 
-    # solve_for_me_fibble(words, "gleam")
+    solve_for_me_fibble(words, "recur")
+
+    # print(get_entropy_fibble("salet", words))
+    # print(get_entropy_fibble("pzazz", words))
 
     def run_test(colors, guess, expected):
         result = is_good_coloring(colors, guess)
